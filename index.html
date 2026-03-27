@@ -9,13 +9,66 @@
       background: #f5f5f5;
     }
 
+    .label {
+      font-weight: bold;
+      margin: 10px 0 6px;
+    }
+
     .editor {
       width: 100%;
       min-height: 200px;
       background: white;
       border: 1px solid #ccc;
-      padding: 10px;
-      margin-bottom: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+      box-sizing: border-box;
+
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      line-height: 1.45;
+      color: #000;
+    }
+
+    /* Force consistent typography everywhere */
+    .editor,
+    .editor * {
+      font-family: Arial, Helvetica, sans-serif !important;
+      color: #000 !important;
+      box-sizing: border-box;
+    }
+
+    /* Reset paragraph spacing */
+    .editor p {
+      margin: 0 0 8px 0 !important;
+      padding: 0 !important;
+      line-height: 1.45 !important;
+    }
+
+    /* Force every bulleted list to align the same */
+    .editor ul {
+      margin: 0 0 14px 0 !important;
+      padding-left: 22px !important;
+      list-style-position: outside !important;
+    }
+
+    /* Force every list item to have the same spacing */
+    .editor li {
+      margin: 0 0 4px 0 !important;
+      padding: 0 !important;
+      line-height: 1.45 !important;
+    }
+
+    .editor li:last-child {
+      margin-bottom: 0 !important;
+    }
+
+    /* Remove extra spacing from nested elements inside bullets */
+    .editor li p,
+    .editor li span,
+    .editor li div {
+      margin: 0 !important;
+      padding: 0 !important;
+      line-height: 1.45 !important;
     }
 
     button {
@@ -26,70 +79,44 @@
       cursor: pointer;
       margin-bottom: 10px;
     }
-
-    .label {
-      font-weight: bold;
-      margin-top: 10px;
-    }
-    .editor {
-  width: 100%;
-  min-height: 200px;
-  background: white;
-  border: 1px solid #ccc;
-  padding: 12px;
-  margin-bottom: 10px;
-
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-.editor ul {
-  padding-left: 20px;
-  margin: 0;
-}
-
-.editor li {
-  margin-bottom: 6px; 
-}
-
-.editor * {
-  font-family: inherit !important;
-}
   </style>
 </head>
 <body>
 
-<h2>Text Color Normalizer</h2>
+  <h2>Text Color Normalizer</h2>
 
-<div class="label">Paste Here:</div>
-<div id="input" class="editor" contenteditable="true"></div>
+  <div class="label">Paste Here:</div>
+  <div id="input" class="editor" contenteditable="true"></div>
 
-<button onclick="formatText()">Normalize to Black</button>
+  <button onclick="formatText()">Normalize to Black</button>
 
-<div class="label">Output:</div>
-<div id="output" class="editor"></div>
+  <div class="label">Output:</div>
+  <div id="output" class="editor"></div>
 
-<script>
-function formatText() {
-  const input = document.getElementById("input");
-  const output = document.getElementById("output");
+  <script>
+    function formatText() {
+      const input = document.getElementById("input");
+      const output = document.getElementById("output");
 
-  const clone = input.cloneNode(true);
+      const clone = input.cloneNode(true);
 
-  const all = clone.querySelectorAll("*");
+      const all = clone.querySelectorAll("*");
 
-  all.forEach(el => {
-    if (el.style && el.style.color) {
-      el.style.color = '';
+      all.forEach(el => {
+        // Remove supplier inline junk that causes uneven spacing/indent
+        el.style.color = "";
+        el.style.fontFamily = "";
+        el.style.fontSize = "";
+        el.style.margin = "";
+        el.style.padding = "";
+        el.style.lineHeight = "";
+        el.style.textIndent = "";
+      });
+
+      // Force output content
+      output.innerHTML = clone.innerHTML;
     }
-
-    el.style.color = '#000';
-  });
-
-  output.innerHTML = clone.innerHTML;
-}
-</script>
+  </script>
 
 </body>
 </html>
