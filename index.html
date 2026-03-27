@@ -29,7 +29,6 @@
       color: #000;
     }
 
-    /* Force consistent typography everywhere */
     .editor,
     .editor * {
       font-family: Arial, Helvetica, sans-serif !important;
@@ -37,21 +36,18 @@
       box-sizing: border-box;
     }
 
-    /* Reset paragraph spacing */
     .editor p {
       margin: 0 0 8px 0 !important;
       padding: 0 !important;
       line-height: 1.45 !important;
     }
 
-    /* Force every bulleted list to align the same */
     .editor ul {
       margin: 0 0 14px 0 !important;
       padding-left: 22px !important;
       list-style-position: outside !important;
     }
 
-    /* Force every list item to have the same spacing */
     .editor li {
       margin: 0 0 4px 0 !important;
       padding: 0 !important;
@@ -62,7 +58,6 @@
       margin-bottom: 0 !important;
     }
 
-    /* Remove extra spacing from nested elements inside bullets */
     .editor li p,
     .editor li span,
     .editor li div {
@@ -88,34 +83,37 @@
   <div class="label">Paste Here:</div>
   <div id="input" class="editor" contenteditable="true"></div>
 
-  <button onclick="formatText()">Normalize to Black</button>
+  <button onclick="formatText()">Format and Copy</button>
 
   <div class="label">Output:</div>
   <div id="output" class="editor"></div>
 
   <script>
-    function formatText() {
-      const input = document.getElementById("input");
-      const output = document.getElementById("output");
+function formatText() {
+  const input = document.getElementById("input");
+  const output = document.getElementById("output");
 
-      const clone = input.cloneNode(true);
+  const clone = input.cloneNode(true);
+  const all = clone.querySelectorAll("*");
 
-      const all = clone.querySelectorAll("*");
+  all.forEach(el => {
+    el.style.color = "";
+    el.style.fontFamily = "";
+    el.style.fontSize = "";
+    el.style.margin = "";
+    el.style.padding = "";
+    el.style.lineHeight = "";
+    el.style.textIndent = "";
+  });
 
-      all.forEach(el => {
-        // Remove supplier inline junk that causes uneven spacing/indent
-        el.style.color = "";
-        el.style.fontFamily = "";
-        el.style.fontSize = "";
-        el.style.margin = "";
-        el.style.padding = "";
-        el.style.lineHeight = "";
-        el.style.textIndent = "";
-      });
+  const cleanedHTML = clone.innerHTML;
 
-      // Force output content
-      output.innerHTML = clone.innerHTML;
-    }
+  output.innerHTML = cleanedHTML;
+
+  navigator.clipboard.writeText(cleanedHTML).then(() => {
+    showCopiedMessage();
+  });
+}
   </script>
 
 </body>
