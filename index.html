@@ -50,10 +50,8 @@ function formatText() {
   const input = document.getElementById("input");
   const output = document.getElementById("output");
 
-  // Clone content so we don’t modify original
   const clone = input.cloneNode(true);
 
-  // Remove ALL color styles safely
   const all = clone.querySelectorAll("*");
 
   all.forEach(el => {
@@ -61,7 +59,6 @@ function formatText() {
       el.style.color = '';
     }
 
-    // Force black text
     el.style.color = '#000';
   });
 
