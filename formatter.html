@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Text Color Normalizer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+
+    .editor {
+      width: 100%;
+      min-height: 200px;
+      background: white;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #003a5b;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    .label {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Text Color Normalizer</h2>
+
+<div class="label">Paste Here:</div>
+<div id="input" class="editor" contenteditable="true"></div>
+
+<button onclick="formatText()">Normalize to Black</button>
+
+<div class="label">Output:</div>
+<div id="output" class="editor"></div>
+
+<script>
+function formatText() {
+  const input = document.getElementById("input");
+  const output = document.getElementById("output");
+
+  // Clone content so we don’t modify original
+  const clone = input.cloneNode(true);
+
+  // Remove ALL color styles safely
+  const all = clone.querySelectorAll("*");
+
+  all.forEach(el => {
+    if (el.style && el.style.color) {
+      el.style.color = '';
+    }
+
+    // Force black text
+    el.style.color = '#000';
+  });
+
+  output.innerHTML = clone.innerHTML;
+}
+</script>
+
+</body>
+</html>
