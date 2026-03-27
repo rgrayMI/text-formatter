@@ -97,13 +97,13 @@ function formatText() {
   const all = clone.querySelectorAll("*");
 
   all.forEach(el => {
-    el.style.color = "";
-    el.style.fontFamily = "";
-    el.style.fontSize = "";
-    el.style.margin = "";
-    el.style.padding = "";
-    el.style.lineHeight = "";
-    el.style.textIndent = "";
+    el.removeAttribute("style");
+
+    [...el.attributes].forEach(attr => {
+      if (attr.name.startsWith("data-")) {
+        el.removeAttribute(attr.name);
+      }
+    });
   });
 
   const cleanedHTML = clone.innerHTML;
