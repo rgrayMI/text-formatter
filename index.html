@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Text Formatter</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -39,31 +40,15 @@
     .editor p {
       margin: 0 0 8px 0 !important;
       padding: 0 !important;
-      line-height: 1.45 !important;
     }
 
     .editor ul {
       margin: 0 0 14px 0 !important;
       padding-left: 22px !important;
-      list-style-position: outside !important;
     }
 
     .editor li {
       margin: 0 0 4px 0 !important;
-      padding: 0 !important;
-      line-height: 1.45 !important;
-    }
-
-    .editor li:last-child {
-      margin-bottom: 0 !important;
-    }
-
-    .editor li p,
-    .editor li span,
-    .editor li div {
-      margin: 0 !important;
-      padding: 0 !important;
-      line-height: 1.45 !important;
     }
 
     button {
@@ -73,17 +58,30 @@
       border: none;
       cursor: pointer;
       margin-bottom: 10px;
+      margin-right: 10px;
+      font-weight: bold;
+    }
+
+    #copiedMsg {
+      display: none;
+      color: green;
+      font-weight: bold;
+      margin-bottom: 10px;
     }
   </style>
 </head>
+
 <body>
 
-  <h2>Text Color Normalizer</h2>
+  <h2>Text Formatter</h2>
 
   <div class="label">Paste Here:</div>
   <div id="input" class="editor" contenteditable="true"></div>
 
   <button onclick="formatText()">Format</button>
+  <button onclick="copyText()">Copy Text</button>
+
+  <div id="copiedMsg">Copied!</div>
 
   <div class="label">Output:</div>
   <div id="output" class="editor"></div>
@@ -94,7 +92,6 @@
       const output = document.getElementById("output");
 
       const clone = input.cloneNode(true);
-
       const all = clone.querySelectorAll("*");
 
       all.forEach(el => {
@@ -108,6 +105,33 @@
       });
 
       output.innerHTML = clone.innerHTML;
+    }
+
+    function copyText() {
+      const output = document.getElementById("output");
+
+      // 👇 This is the KEY difference
+      const text = output.innerText;
+
+      const temp = document.createElement("textarea");
+      temp.value = text;
+      document.body.appendChild(temp);
+
+      temp.select();
+      document.execCommand("copy");
+
+      document.body.removeChild(temp);
+
+      showCopiedMessage();
+    }
+
+    function showCopiedMessage() {
+      const msg = document.getElementById("copiedMsg");
+      msg.style.display = "block";
+
+      setTimeout(() => {
+        msg.style.display = "none";
+      }, 1500);
     }
   </script>
 
