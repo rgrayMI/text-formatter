@@ -108,22 +108,33 @@
     }
 
     function copyText() {
-      const output = document.getElementById("output");
+  const output = document.getElementById("output");
 
-      // 👇 This is the KEY difference
-      const text = output.innerText;
+  let text = "";
 
-      const temp = document.createElement("textarea");
-      temp.value = text;
-      document.body.appendChild(temp);
+  const items = output.querySelectorAll("li");
 
-      temp.select();
-      document.execCommand("copy");
+  if (items.length > 0) {
+    // If list exists → rebuild with bullets
+    items.forEach(li => {
+      text += "• " + li.innerText.trim() + "\n";
+    });
+  } else {
+    // Fallback if no list
+    text = output.innerText;
+  }
 
-      document.body.removeChild(temp);
+  const temp = document.createElement("textarea");
+  temp.value = text.trim();
+  document.body.appendChild(temp);
 
-      showCopiedMessage();
-    }
+  temp.select();
+  document.execCommand("copy");
+
+  document.body.removeChild(temp);
+
+  showCopiedMessage();
+}
 
     function showCopiedMessage() {
       const msg = document.getElementById("copiedMsg");
