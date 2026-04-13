@@ -2,7 +2,6 @@
 <html>
 <head>
   <title>Text Formatter</title>
-
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -40,15 +39,31 @@
     .editor p {
       margin: 0 0 8px 0 !important;
       padding: 0 !important;
+      line-height: 1.45 !important;
     }
 
     .editor ul {
       margin: 0 0 14px 0 !important;
       padding-left: 22px !important;
+      list-style-position: outside !important;
     }
 
     .editor li {
       margin: 0 0 4px 0 !important;
+      padding: 0 !important;
+      line-height: 1.45 !important;
+    }
+
+    .editor li:last-child {
+      margin-bottom: 0 !important;
+    }
+
+    .editor li p,
+    .editor li span,
+    .editor li div {
+      margin: 0 !important;
+      padding: 0 !important;
+      line-height: 1.45 !important;
     }
 
     button {
@@ -70,10 +85,9 @@
     }
   </style>
 </head>
-
 <body>
 
-  <h2>Text Formatter</h2>
+  <h2>Text Color Normalizer</h2>
 
   <div class="label">Paste Here:</div>
   <div id="input" class="editor" contenteditable="true"></div>
@@ -84,7 +98,7 @@
   <div id="copiedMsg">Copied!</div>
 
   <div class="label">Output:</div>
-  <div id="output" class="editor"></div>
+  <div id="output" class="editor" contenteditable="true"></div>
 
   <script>
     function formatText() {
@@ -108,33 +122,20 @@
     }
 
     function copyText() {
-  const output = document.getElementById("output");
+      const output = document.getElementById("output");
 
-  let text = "";
+      const selection = window.getSelection();
+      const range = document.createRange();
 
-  const items = output.querySelectorAll("li");
+      selection.removeAllRanges();
+      range.selectNodeContents(output);
+      selection.addRange(range);
 
-  if (items.length > 0) {
-    // If list exists → rebuild with bullets
-    items.forEach(li => {
-      text += "• " + li.innerText.trim() + "\n";
-    });
-  } else {
-    // Fallback if no list
-    text = output.innerText;
-  }
+      document.execCommand("copy");
 
-  const temp = document.createElement("textarea");
-  temp.value = text.trim();
-  document.body.appendChild(temp);
-
-  temp.select();
-  document.execCommand("copy");
-
-  document.body.removeChild(temp);
-
-  showCopiedMessage();
-}
+      selection.removeAllRanges();
+      showCopiedMessage();
+    }
 
     function showCopiedMessage() {
       const msg = document.getElementById("copiedMsg");
